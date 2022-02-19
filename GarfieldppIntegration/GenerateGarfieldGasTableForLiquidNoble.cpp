@@ -271,7 +271,7 @@ double GetDriftVelocity_LiquidAr(double temperature_K, double field_V_cm) {
   double dfield = field_V_cm*1000;
   double mobility = GetElectronLArMobility(temperature_K, dfield);
     
-  double Drift_vel = mobility * dfield / 1000.;
+  double Drift_vel = mobility * dfield / 1e6;
   return Drift_vel;
 }
 
