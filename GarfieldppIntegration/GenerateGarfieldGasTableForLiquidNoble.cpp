@@ -254,7 +254,7 @@ double GetDriftVelocity_LiquidAr(double temperature_K, double field_V_cm) {
 void PassTransportInfo(std::ofstream& outFile,
                        std::vector<double> fieldList_V_cm,
                        double temperature_K, 
-                       string element) {
+                       std::string element) {
   // Create a NEST detector and construct the NEST class using this object
   DetectorExample_XENON10* detector = new DetectorExample_XENON10();
   NEST::NESTcalc n(detector);
@@ -402,7 +402,7 @@ int main(int argc, char** argv) {
   }
 
   // Pass in the transport info, using the field list and temperature
-  PassTransportInfo(outFile, fieldList_V_cm, string element, std::get<5>(inputArgs));
+  PassTransportInfo(outFile, fieldList_V_cm, std::get<5>(inputArgs),std::get<0>(inputArgs));
 
   // Pass in the footer information
   PassFooterInformation(outFile);
