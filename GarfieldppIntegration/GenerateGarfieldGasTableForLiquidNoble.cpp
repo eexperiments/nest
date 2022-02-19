@@ -221,7 +221,7 @@ int PassConstantBody(std::ofstream& outFile, std::string element) {
 
 //--------------------------------------------------------------------------------------------------------//
 double GetElectronLArMobility(double temperature_K, double field_V_cm){
-  double dfield = field_V_cm/1000; //expects kV/cm
+  double dfield = field_V_cm; //expects kV/cm
   double T1 = 87.0;
   double T0 = 89.0;
   double a0 = 551.6;
@@ -303,7 +303,7 @@ void PassTransportInfo(std::ofstream& outFile,
 //       } else {
     double driftVel_CmperUs =
         GetDriftVelocity_LiquidAr(temperature_K,
-                                  field * reducedFieldCorrectionFactor)/100;
+                                  field * reducedFieldCorrectionFactor)/10;
     double DT_cm2_s =
         GetLatDiffusionConstantLAr(temperature_K,
                                   field * reducedFieldCorrectionFactor);
