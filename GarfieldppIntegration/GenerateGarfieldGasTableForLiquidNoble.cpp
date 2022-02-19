@@ -271,7 +271,7 @@ double GetDriftVelocity_LiquidAr(double temperature_K, double field_V_cm) {
   double dfield = field_V_cm;
   double mobility = GetElectronLArMobility(temperature_K, dfield);
     
-  double Drift_vel = mobility * dfield;
+  double Drift_vel = mobility * dfield / 1000.;
   return Drift_vel;
 }
 
@@ -320,7 +320,7 @@ void PassTransportInfo(std::ofstream& outFile,
     // Have to get correct units and weight the DL and DT properly for Garfield.
     // NB: Garfield uses the diffusion CONSTANT as the input, not the diffusion
     // COEFFICIENT. This is why there's a square root of stuff infolved here.
-    double driftVel_CmperS = driftVel_CmperUs * 1e6;
+    double driftVel_CmperS = driftVel_CmperUs * 1e3;
     double DT_modified = pow(2 * DT_cm2_s / driftVel_CmperS, 0.5) *
                          pow(reducedFieldCorrectionFactor, 0.5);
     double DL_modified = pow(2 * DL_cm2_s / driftVel_CmperS, 0.5) *
