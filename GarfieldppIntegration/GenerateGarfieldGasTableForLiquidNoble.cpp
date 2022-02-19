@@ -221,7 +221,7 @@ int PassConstantBody(std::ofstream& outFile, std::string element) {
 
 //--------------------------------------------------------------------------------------------------------//
 double GetElectronLArMobility(double temperature_K, double field_V_cm){
-  double dfield = field_V_cm*100;
+  double dfield = field_V_cm*1000;
   double T1 = 87.0;
   double T0 = 89.0;
   double a0 = 551.6;
@@ -237,7 +237,7 @@ return mobility;
 
 // expression for LAr Transverse
 double GetLatDiffusionConstantLAr(double temperature_K, double field_V_cm) {
-  double dfield = field_V_cm*100;
+  double dfield = field_V_cm*1000;
   double T1 = 87.0;
   double T0 = 89.0;
   double b0 = 0.0075;
@@ -253,7 +253,7 @@ double GetLatDiffusionConstantLAr(double temperature_K, double field_V_cm) {
 }
 
 double GetLongDiffusionConstantLAr(double temperature_K, double field_V_cm) {
-  double dfield = field_V_cm*100;
+  double dfield = field_V_cm*1000;
   double T1 = 87.0;
   double T0 = 89.0;
   double b0 = 0.0075;
@@ -268,7 +268,7 @@ double GetLongDiffusionConstantLAr(double temperature_K, double field_V_cm) {
 
 
 double GetDriftVelocity_LiquidAr(double temperature_K, double field_V_cm) {
-  double dfield = field_V_cm*100;
+  double dfield = field_V_cm*1000;
   double mobility = GetElectronLArMobility(temperature_K, dfield);
     
   double Drift_vel = mobility * dfield / 1000.;
