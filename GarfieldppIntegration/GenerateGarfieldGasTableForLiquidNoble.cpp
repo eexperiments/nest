@@ -303,7 +303,7 @@ void PassTransportInfo(std::ofstream& outFile,
 //       } else {
     double driftVel_CmperUs =
         GetDriftVelocity_LiquidAr(temperature_K,
-                                  field * reducedFieldCorrectionFactor);
+                                  field * reducedFieldCorrectionFactor)/100;
     double DT_cm2_s =
         GetLatDiffusionConstantLAr(temperature_K,
                                   field * reducedFieldCorrectionFactor);
