@@ -254,7 +254,7 @@ double GetDriftVelocity_LiquidAr(double temperature_K, double field_V_cm) {
 void PassTransportInfo(std::ofstream& outFile,
                        std::vector<double> fieldList_V_cm,
                        double temperature_K, 
-                       double element) {
+                       std::string element) {
   // Create a NEST detector and construct the NEST class using this object
   DetectorExample_XENON10* detector = new DetectorExample_XENON10();
   NEST::NESTcalc n(detector);
@@ -273,7 +273,7 @@ void PassTransportInfo(std::ofstream& outFile,
         n.GetDiffLong_Liquid(field * reducedFieldCorrectionFactor, true);
       
 
-      } else if {element == "Ar"
+      } else if (element == "Ar") {
     double driftVel_CmperUs =
         GetDriftVelocity_LiquidAr(temperature_K,
                                   field * reducedFieldCorrectionFactor) / 10.;
