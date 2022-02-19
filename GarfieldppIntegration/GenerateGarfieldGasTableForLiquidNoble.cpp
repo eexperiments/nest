@@ -273,7 +273,7 @@ void PassTransportInfo(std::ofstream& outFile,
         n.GetDiffLong_Liquid(field * reducedFieldCorrectionFactor, true);
       
 
-      } else if (element == "Ar") {
+      } else {
     double driftVel_CmperUs =
         GetDriftVelocity_LiquidAr(temperature_K,
                                   field * reducedFieldCorrectionFactor) / 10.;
