@@ -222,7 +222,7 @@ int PassConstantBody(std::ofstream& outFile, std::string element) {
 //--------------------------------------------------------------------------------------------------------//
 double GetElectronLArMobility(double temperature_K, double field_V_cm){
   double dfield = field_V_cm;
-  double T1 = temperature_K;
+  double T1 = 87.0;
   double T0 = 89.0;
   double a0 = 551.6;
   double a1 = 7953.7*0.9;
@@ -231,22 +231,22 @@ double GetElectronLArMobility(double temperature_K, double field_V_cm){
   double a4 = 43.63;
   double a5 = 0.2053;
   double mobility = (a0 + a1*dfield + a2*pow(dfield, 1.5) + a3*pow(dfield, 2.5)) / 
-      (1 + a1/a0*dfield + a4*pow(dfield, 2) + a5*pow(dfield, 3)) * pow(T/T0, -1.5);
+      (1 + a1/a0*dfield + a4*pow(dfield, 2) + a5*pow(dfield, 3)) * pow(temperature_K/T0, -1.5);
 return mobility;
 }
 
 // expression for LAr Transverse
 double GetLatDiffusionConstantLAr(double temperature_K, double field_V_cm) {
   double dfield = field_V_cm;
-  double T1 = temperature_K;
+  double T1 = 87.0;
   double T0 = 89.0;
   double b0 = 0.0075;
   double b1 = 742.9;
   double b2 = 3269.6;
   double b3 = 31678.2;
-  double mobility = GetElectronLArMobility(T1, dfield);
-  double eps_L = (b0 + b1*dfield + b2*dfield*dfield) / (1 + b1/b0*dfield + b3*dfield*dfield) * T/T1;
-  double dmu_dE = (GetElectronLArMobility(T1, dfield*1.001) - mobility)/(0.001*dfield);
+  double mobility = GetElectronLArMobility(temperature_K, dfield);
+  double eps_L = (b0 + b1*dfield + b2*dfield*dfield) / (1 + b1/b0*dfield + b3*dfield*dfield) * temperature_K/T1;
+  double dmu_dE = (GetElectronLArMobility(temperature_K, dfield*1.001) - mobility)/(0.001*dfield);
     
   double Diff_Tran = eps_L * mobility / (1+dfield/mobility*dmu_dE);
   return Diff_Tran;
@@ -254,14 +254,14 @@ double GetLatDiffusionConstantLAr(double temperature_K, double field_V_cm) {
 
 double GetLongDiffusionConstantLAr(double temperature_K, double field_V_cm) {
   double dfield = field_V_cm;
-  double T1 = temperature_K;
+  double T1 = 87.0;
   double T0 = 89.0;
   double b0 = 0.0075;
   double b1 = 742.9;
   double b2 = 3269.6;
   double b3 = 31678.2;
-  double mobility = GetElectronLArMobility(T1, dfield);
-  double eps_L = (b0 + b1*dfield + b2*dfield*dfield) / (1 + b1/b0*dfield + b3*dfield*dfield) * T/T1;
+  double mobility = GetElectronLArMobility(temperature_K, dfield);
+  double eps_L = (b0 + b1*dfield + b2*dfield*dfield) / (1 + b1/b0*dfield + b3*dfield*dfield) * temperature_K/T1;
   double Diff_Long = eps_L * mobility;
   return Diff_Long;
 }
@@ -269,8 +269,8 @@ double GetLongDiffusionConstantLAr(double temperature_K, double field_V_cm) {
 
 double GetDriftVelocity_LiquidAr(double temperature_K, double field_V_cm) {
   double dfield = field_V_cm;
-  double T1 = temperature_K;
-  double mobility = GetElectronLArMobility(T1, dfield);
+  double T1 = 87.0;
+  double mobility = GetElectronLArMobility(temperature_K, dfield);
     
   double Drift_vel = mobility * dfield /1000;
   return Drift_vel;
