@@ -3,8 +3,8 @@
 //  GenerateGarfieldGasTableForLiquidNoble.cpp
 //
 //  rlinehan@stanford.edu
-//  9/12/2020
-//
+//  9/12/2020  
+//  edited: bahrudin@stanford.edu - added LAr
 //  This code takes NEST as an input and generates
 //  the tables of electron transport properties
 //  used by the AvalancheMC code in Garfield.
@@ -170,7 +170,7 @@ int PassConstantBody(std::ofstream& outFile, std::string element) {
   // looking at pure Xe or Ar, it's simpler than trying to use Garfield's mixture
   // codes. But since this code is somewhat modular, one can easily come back and
   // improve this later if it is so desired.
-  if (element == "Xe") {
+  if (element == "Xe" || element == "Ar") {
     outFile << " 0.00000000E+00 0.00000000E+00 0.00000000E+00 0.00000000E+00 "
                "0.00000000E+00"
             << std::endl;
@@ -210,7 +210,7 @@ int PassConstantBody(std::ofstream& outFile, std::string element) {
   } else {
     std::cout
         << "----> NEST cannot currently generate the mixture for your element "
-        << element << ". Right now, NEST only supports LXe." << std::endl;
+        << element << ". Right now, NEST only supports LXe and LAr." << std::endl;
     return -1;
   }
 
@@ -220,8 +220,8 @@ int PassConstantBody(std::ofstream& outFile, std::string element) {
 }
 
 //--------------------------------------------------------------------------------------------------------//
-// Will be eliminated when NEST.cpp gets a dedicated function for this.
-double GetLatDiffusionConstant(double field_V_cm) {
+// expression for LAr
+double GetLatDiffusionConstantLAr(double field_V_cm) {
   double dfield = field_V_cm;
   double Diff_Tran = 37.368 * pow(dfield, .093452) *
                      exp(-8.1651e-5 * dfield);  // arXiv:1609.04467 (EXO-200)
@@ -229,14 +229,23 @@ double GetLatDiffusionConstant(double field_V_cm) {
 }
 
 //--------------------------------------------------------------------------------------------------------//
-// Will be eliminated when NEST.cpp gets a dedicated function for this. //Should
+// expression for LAr //Should
 // be "diffusion coefficient, btw"
-double GetLongDiffusionConstant(double field_V_cm) {
+double GetLongDiffusionConstantLAr(double field_V_cm) {
   double dfield = field_V_cm;
   double Diff_Long = 345.92 * pow(dfield, -0.47880) *
                      exp(-81.3230 / dfield);  // fit to Aprile & Doke review
   // paper and to arXiv:1102.2865;
   return Diff_Long;
+}
+//--------------------------------------------------------------------------------------------------------//
+// expression for LAr 
+double GetDriftVelocity_LiquidAr(double temperature_K, double field_V_cm) {
+  double dfield = field_V_cm;
+  double temper = temperature_K;
+  double Drift_vel = 37.368 * pow(dfield, .093452) *
+                     exp(-8.1651e-5 * dfield);  
+  return Drift_vel;
 }
 
 //--------------------------------------------------------------------------------------------------------//
@@ -244,7 +253,8 @@ double GetLongDiffusionConstant(double field_V_cm) {
 // gas table. It draws from NEST's models as a function of field and temperature.
 void PassTransportInfo(std::ofstream& outFile,
                        std::vector<double> fieldList_V_cm,
-                       double temperature_K) {
+                       double temperature_K, 
+                       double element) {
   // Create a NEST detector and construct the NEST class using this object
   DetectorExample_XENON10* detector = new DetectorExample_XENON10();
   NEST::NESTcalc n(detector);
@@ -252,14 +262,27 @@ void PassTransportInfo(std::ofstream& outFile,
   for (int iF = 0; iF < fieldList_V_cm.size(); ++iF) {
     double field =
         fieldList_V_cm[iF];  // Note that this is reduced field, in V/cm/torr
+    
+    if (element == "Xe") {
     double driftVel_CmperUs =
         n.GetDriftVelocity_Liquid(temperature_K,
-                                  field * reducedFieldCorrectionFactor, 1) /
-        10.;
+                                  field * reducedFieldCorrectionFactor, 1) /10.;
     double DT_cm2_s =
         n.GetDiffTran_Liquid(field * reducedFieldCorrectionFactor, true);
     double DL_cm2_s =
         n.GetDiffLong_Liquid(field * reducedFieldCorrectionFactor, true);
+      
+
+      } else if {element == "Ar"
+    double driftVel_CmperUs =
+        GetDriftVelocity_LiquidAr(temperature_K,
+                                  field * reducedFieldCorrectionFactor) / 10.;
+    double DT_cm2_s =
+        GetLatDiffusionConstantLAr(field * reducedFieldCorrectionFactor);
+    double DL_cm2_s =
+        GetLongDiffusionConstantLAr(field * reducedFieldCorrectionFactor);
+
+    }
 
     //    std::cout << "field: " << field*reducedFieldCorrectionFactor << ", DL:
     //    " << DL_cm2_s << ", DT : " << DT_cm2_s << ", driftVel_CmperUs: " <<
@@ -376,7 +399,7 @@ int main(int argc, char** argv) {
   }
 
   // Pass in the transport info, using the field list and temperature
-  PassTransportInfo(outFile, fieldList_V_cm, std::get<5>(inputArgs));
+  PassTransportInfo(outFile, fieldList_V_cm, std::get<5>(inputArgs),std::string element);
 
   // Pass in the footer information
   PassFooterInformation(outFile);
