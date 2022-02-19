@@ -263,6 +263,10 @@ void PassTransportInfo(std::ofstream& outFile,
     double field =
         fieldList_V_cm[iF];  // Note that this is reduced field, in V/cm/torr
     
+    double driftVel_CmperUs = 1;
+    double DT_cm2_s = 1;
+    double DL_cm2_s =1;
+      
     if (element == "Xe") {
     double driftVel_CmperUs =
         n.GetDriftVelocity_Liquid(temperature_K,
@@ -272,7 +276,6 @@ void PassTransportInfo(std::ofstream& outFile,
     double DL_cm2_s =
         n.GetDiffLong_Liquid(field * reducedFieldCorrectionFactor, true);
       
-
       } else {
     double driftVel_CmperUs =
         GetDriftVelocity_LiquidAr(temperature_K,
