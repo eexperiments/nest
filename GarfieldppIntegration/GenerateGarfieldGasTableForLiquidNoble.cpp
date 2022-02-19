@@ -290,21 +290,18 @@ void PassTransportInfo(std::ofstream& outFile,
   for (int iF = 0; iF < fieldList_V_cm.size(); ++iF) {
     double field =
         fieldList_V_cm[iF];  // Note that this is reduced field, in V/cm/torr
-    
-    double driftVel_CmperUs = 1;
-    double DT_cm2_s = 1;
-    double DL_cm2_s =1;
+
+      //  TRY TO MAKE IT GENERAL. ---- STUFF BELOW ONLY LAr 
+//     if (element == "Xe") {
+//     double driftVel_CmperUs =
+//         n.GetDriftVelocity_Liquid(temperature_K,
+//                                   field * reducedFieldCorrectionFactor, 1) /10.;
+//     double DT_cm2_s =
+//         n.GetDiffTran_Liquid(field * reducedFieldCorrectionFactor, true);
+//     double DL_cm2_s =
+//         n.GetDiffLong_Liquid(field * reducedFieldCorrectionFactor, true);
       
-    if (element == "Xe") {
-    double driftVel_CmperUs =
-        n.GetDriftVelocity_Liquid(temperature_K,
-                                  field * reducedFieldCorrectionFactor, 1) /10.;
-    double DT_cm2_s =
-        n.GetDiffTran_Liquid(field * reducedFieldCorrectionFactor, true);
-    double DL_cm2_s =
-        n.GetDiffLong_Liquid(field * reducedFieldCorrectionFactor, true);
-      
-      } else {
+//       } else {
     double driftVel_CmperUs =
         GetDriftVelocity_LiquidAr(temperature_K,
                                   field * reducedFieldCorrectionFactor) / 10.;
@@ -315,7 +312,7 @@ void PassTransportInfo(std::ofstream& outFile,
         GetLongDiffusionConstantLAr(temperature_K,
                                   field * reducedFieldCorrectionFactor);
 
-    }
+//     }
 
     //    std::cout << "field: " << field*reducedFieldCorrectionFactor << ", DL:
     //    " << DL_cm2_s << ", DT : " << DT_cm2_s << ", driftVel_CmperUs: " <<
